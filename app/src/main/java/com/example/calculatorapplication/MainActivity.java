@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 solutionTv.setText(data + "2");
             }
         });
-
-
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,7 +192,15 @@ public class MainActivity extends AppCompatActivity {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                data = data.substring(0,data.length()-1);
+                data = solutionTv.getText().toString();
+                if(data.length() > 1)
+                {
+                    data = data.substring(0,data.length()-1);
+                }
+                else
+                {
+                    data="";
+                }
                 solutionTv.setText(data);
             }
         });
@@ -206,16 +212,24 @@ public class MainActivity extends AppCompatActivity {
                 data = data.replaceAll("×", "*");
                 data = data.replaceAll("%", "/100");
                 data = data.replaceAll("÷", "/");
-                Context rhino = Context.enter();
-                rhino.setOptimizationLevel(-1);
+                String data_temp = data.replaceAll("(\\d+)\\^(\\d+)", "Math.pow($1, $2)"); //covert into pow(a,b)
+                try {
+                    Context rhino = Context.enter();
+                    rhino.setOptimizationLevel(-1);
 
-                String finalResult = "";
+                    String tempfinalResult = "";
 
-                Scriptable scriptable = rhino.initStandardObjects();
-                finalResult = rhino.evaluateString(scriptable, data, "Javsscript", 1, null).toString();
+                    Scriptable scriptable = rhino.initStandardObjects();
+                    tempfinalResult = rhino.evaluateString(scriptable, data_temp, "Javsscript", 1, null).toString();
+                    float tempResult = Float.parseFloat(tempfinalResult);
+                    Math.round((tempResult*10000000)/10000000);
+                    String finalResult = String.valueOf(tempResult);
+                    resultTv.setText(finalResult);
 
-                resultTv.setText(finalResult);
-
+                } catch (Exception e) {
+                    solutionTv.setText("");
+                    resultTv.setText("0");
+                }
             }
         });
     }
