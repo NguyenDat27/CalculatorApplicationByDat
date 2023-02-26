@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
+
+
 public class MainActivity extends AppCompatActivity {
 
     TextView resultTv, solutionTv;
@@ -208,21 +208,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 data = solutionTv.getText().toString();
-
                 data = data.replaceAll("×", "*");
                 data = data.replaceAll("%", "/100");
                 data = data.replaceAll("÷", "/");
-                String data_temp = data.replaceAll("(\\d+)\\^(\\d+)", "Math.pow($1, $2)"); //covert into pow(a,b)
                 try {
-                    Context rhino = Context.enter();
-                    rhino.setOptimizationLevel(-1);
-
-                    String tempfinalResult = "";
-
-                    Scriptable scriptable = rhino.initStandardObjects();
-                    tempfinalResult = rhino.evaluateString(scriptable, data_temp, "Javsscript", 1, null).toString();
-                    float tempResult = Float.parseFloat(tempfinalResult);
-                    Math.round((tempResult*10000000)/10000000);
+                    Double tempResult =Calculator.calculateString(data) ;
+                    tempResult  = Math.round(tempResult  * 10000000.0) / 10000000.0;
                     String finalResult = String.valueOf(tempResult);
                     resultTv.setText(finalResult);
 
