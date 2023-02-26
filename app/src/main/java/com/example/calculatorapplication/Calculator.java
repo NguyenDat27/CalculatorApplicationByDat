@@ -13,7 +13,7 @@ public class Calculator {
         while (i < str.length()) {
             if (Character.isDigit(str.charAt(i))) {
                 int j = i + 1;
-                while (j < str.length() && Character.isDigit(str.charAt(j))) {
+                while (j < str.length() && (Character.isDigit(str.charAt(j)) || str.charAt(j) == '.')) {
                     j++;
                 }
                 double num = Double.parseDouble(str.substring(i, j));
@@ -79,8 +79,7 @@ public class Calculator {
                 }
                 ops.push(str.charAt(i));
                 i++;
-            }
-            else {
+            } else {
                 i++;
             }
         }
@@ -93,7 +92,6 @@ public class Calculator {
         }
         return nums.pop();
     }
-
     public static double applyOp(double num1, double num2, char op) {
         switch (op) {
             case '+':
